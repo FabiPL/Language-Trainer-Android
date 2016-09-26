@@ -27,13 +27,13 @@ Podcast	*				98	Russian	3903
 zusammen	*	Ich denke, ihr habt {zusammen} Abendbrot gegessen.			98	Russian	3947	
 Abend	*				98	Russian	3886	
 du	*				98	Russian	3864	
-пожаловать	*				98	Russian	3823	
 man	*				98	Russian	3810	
+пожаловать	*				98	Russian	3823	
 Анапа	Anapa	Сочи, {Анапа}, Геленджик наиболее популярны.			98	Russian	3843	
 где	*				98	Russian	3845	
 sagst	*				98	Russian	3900	
-Амур	Amor	Например, Волгу, Обь, Иртыш, Енисей, {Амур} и многие другие.			98	Russian	3883	
 gegessen	*	Ich denke, ihr habt zusammen Abendbrot {gegessen}.			98	Russian	3781	
+Амур	Amor	Например, Волгу, Обь, Иртыш, Енисей, {Амур} и многие другие.			98	Russian	3883	
 Елена	Elena	– Твоя подруга {Елена} пришла.			98	Russian	3841	
 Новосибирск-Главный	Novosibirsk-Glavny	Он посвящен труду строителей и завершению работ над Кругобайкальской железной дорогой.Другим интересным местом является вокзал на станции {Новосибирск-Главный}.			98	Russian	3980	
 tasteofrussian	*				98	Russian	3780	
@@ -71,8 +71,8 @@ lecker	*				98	Russian	3931
 Фриден	"Frieden"	бы назвала город «{Фриден}», а потом опять «Миров», и снова			98	Russian	19179	
 Мама	*				98	Russian	3938	
 heißt	*				98	Russian	3986	
-Канаэ	Name	12 февраля 2012 года он женился на красавице {Канаэ} Миахаре.			98	Russian	19519	
 lútschschij	*	лучший (adj, m) [{lútschschij}]			98	Russian	3793	
+Канаэ	Name	12 февраля 2012 года он женился на красавице {Канаэ} Миахаре.			98	Russian	19519	
 journalíßtam	*				98	Russian	3812	
 pl	*	продавцы ({pl}) [pradaftzý] – Verkäufer			98	Russian	3879	
 этой	*				98	Russian	3791	
@@ -150,8 +150,8 @@ es	*				98	Russian	3865
 Чуня	*	{Чуня}!			98	Russian	3971	
 nat	*				98	Russian	3836	
 Regenschirm	*	Как по-русски „{Regenschirm}“?			98	Russian	3790	
-Ich	*	{Ich} denke, ihr habt zusammen Abendbrot gegessen.			98	Russian	3987	
 hast	*				98	Russian	3783	
+Ich	*	{Ich} denke, ihr habt zusammen Abendbrot gegessen.			98	Russian	3987	
 Ко-ко-ко	*				98	Russian	3846	
 самом	*	На {самом} деле развлекаться зимой в России любят не только дети, но и взрослые.			98	Russian	3854	
 www	*				98	Russian	3873	
@@ -171,8 +171,8 @@ Wie	*				98	Russian	3916
 Дениса	*				98	Russian	3876	
 Wir	*				98	Russian	3917	
 Russisch	*				98	Russian	3936	
-Вика	Vika (Name)	Вдруг она увидела другую девочку, которую звали {Вика}.			98	Russian	19388	
 aber	*				98	Russian	3924	
+Вика	Vika (Name)	Вдруг она увидела другую девочку, которую звали {Вика}.			98	Russian	19388	
 XI-XIII	11. - 13.	{XI-XIII} века известны как период феодальной раздробленности на Руси.			98	Russian	3888	
 Виктор	Viktor (Name)	{Виктор} о своем новом доме.			98	Russian	3920	
 natschálnik	*	начальник (m) [{natschálnik}]			98	Russian	3801	
@@ -240,8 +240,8 @@ IV	4.	Ярким правителем был Иван {IV} Грозный.			98	
 дорогой	*	Он посвящен труду строителей и завершению работ над Кругобайкальской железной {дорогой}.Другим интересным местом является вокзал на станции Новосибирск-Главный.			98	Russian	3834	
 Ah	*				98	Russian	3831	
 krúpnaje	*	крупное предприятие [{krúpnaje} pridprijátije]			98	Russian	3944	
-Санкт-Петербурга	Sankt-Peterburg	Также его заслугой является строительство великолепного {Санкт-Петербурга}, расположенного на реке Нева, а также многих других городов.			98	Russian	3881	
 ganz	*				98	Russian	3858	
+Санкт-Петербурга	Sankt-Peterburg	Также его заслугой является строительство великолепного {Санкт-Петербурга}, расположенного на реке Нева, а также многих других городов.			98	Russian	3881	
 S	*				98	Russian	3773	
 gekocht	*				98	Russian	3875	
 etwas	*				98	Russian	3880	
