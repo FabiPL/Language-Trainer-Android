@@ -1,12 +1,13 @@
 package com.futurelanguagelearning.languagetrainerandroid;
 
 import android.graphics.Color;
+import android.support.annotation.IntegerRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.Random;
@@ -33,6 +34,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        trainer = new TrainerFct();
+        trainer.readLWTExportFile();
+
+        Log.i(TAG, "onCreate");
+
         termLabel = (TextView) findViewById(R.id.termLabel);
         sentenceLabel = (TextView) findViewById(R.id.sentenceLabel);
         feedbackLabel = (TextView) findViewById(R.id.feedbackLabel);
@@ -58,7 +64,22 @@ public class MainActivity extends AppCompatActivity {
         sentenceLabel.setText("");
         feedbackLabel.setText("Ready when you are :)");
         continueButton.setText("Start");
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        try {
+            trainer.createImportFiles();
+        } catch (IOException e) {
+            Log.v(TAG,e.toString());
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         trainer = new TrainerFct();
         trainer.readLWTExportFile();
     }
@@ -98,10 +119,10 @@ public class MainActivity extends AppCompatActivity {
                     button.setBackgroundColor(Color.RED);
             }
 
-            if(trainer.getStatus(termLabel.getText().toString()) == 1) {
+            if(Integer.parseInt(trainer.getStatus(termLabel.getText().toString())) == 1) {
                 feedbackLabel.setText("Status unchanged (1)");
             } else {
-                int before = trainer.getStatus(termLabel.getText().toString());
+                int before = Integer.parseInt(trainer.getStatus(termLabel.getText().toString()));
                 int after = before - 1;
                 trainer.changeStatus(termLabel.getText().toString(), after);
                 feedbackLabel.setText("Status moved (" + before + " -> " + after + ")");
@@ -138,10 +159,10 @@ public class MainActivity extends AppCompatActivity {
             redButton.setEnabled(false);
             greenButton.setEnabled(false);
 
-            if(trainer.getStatus(termLabel.getText().toString()) == 5) {
+            if(Integer.parseInt(trainer.getStatus(termLabel.getText().toString())) == 5) {
                 feedbackLabel.setText("Status unchanged (5)");
             } else {
-                int before = trainer.getStatus(termLabel.getText().toString());
+                int before = Integer.parseInt(trainer.getStatus(termLabel.getText().toString()));
                 int after = before + 1;
                 trainer.changeStatus(termLabel.getText().toString(), after);
                 feedbackLabel.setText("Status moved (" + before + " -> " + after + ")");

@@ -1,8 +1,9 @@
 package com.futurelanguagelearning.languagetrainerandroid;
 
-import android.nfc.Tag;
-import android.os.Environment;
 import android.util.Log;
+
+import org.apache.commons.io.FileUtils;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -27,7 +28,7 @@ public class TrainerFct {
     }
 
     public void readLWTExportFile() {
-        String path = "/storage/emulated/0";
+        String path = "/storage/emulated/0/LWTexport";
 //        File sdcard = Environment.getExternalStorageDirectory(); //this would be used for a public app coz phones use different paths
         File file = new File(path,"lwt.txt");
 
@@ -71,8 +72,9 @@ public class TrainerFct {
      * @throws IOException
      */
     public void save() throws IOException {
-        File sdcard = Environment.getExternalStorageDirectory();
-        File file = new File("/storage/emulated/0/Android/data/com.dropbox.android/files/u357296010/scratch/android/language-trainer-android/LWTexport","lwt.txt");
+        String path = "/storage/emulated/0/LWTexport";
+//        File sdcard = Environment.getExternalStorageDirectory();
+        File file = new File(path,"lwt.txt");
 
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file),"UTF-8"));
 
@@ -109,8 +111,8 @@ public class TrainerFct {
      * @param term
      * @return status of term (int!)
      */
-    public int getStatus(String term) {
-        return Integer.parseInt(database.get(term).get(3));
+    public String getStatus(String term) {
+        return database.get(term).get(3);
     }
 
     /**
@@ -134,77 +136,89 @@ public class TrainerFct {
      * -> can be imported via LWT - Import Term (in this version each still needs to be imported manually)
      * @throws IOException
      */
-//    public void createImportFiles() throws IOException {
-//        File dir = new File("LWTimport");
-//        File[] directoryListing = dir.listFiles();
-//
-//        if (directoryListing != null) {
-//            for (File child : directoryListing) {
-//                child.delete(); //deletes already existent files before writing new ones
-//            }
-//        } else {
-//            // Directory not existent
-//        }
-//
-//        HashMap<String,ArrayList<String>> temp = new HashMap<>();
-//        temp.putAll(database);
-//
-//        BufferedWriter bw = null;
-//
-//        for(Map.Entry<String, ArrayList<String>> set : temp.entrySet()) {
-//            int status = Integer.parseInt(set.getValue().get(3));
-//            String filename = "LWTimport/WordDatabase_Status";
-//
-//            set.getValue().add(3, set.getValue().get(6));
-//
-//            String output = set.getKey()+listToString(temp.get(set.getKey()));
-//
-//            switch (status) {
-//                case 1:		bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename+status+".txt",true),"UTF-8"));
-//                    bw.write(output);
-//                    bw.newLine();
-//                    bw.flush();
-//                    break;
-//                case 2:		bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename+status+".txt",true),"UTF-8"));
-//                    bw.write(output);
-//                    bw.newLine();
-//                    bw.flush();
-//                    break;
-//                case 3:		bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename+status+".txt",true),"UTF-8"));
-//                    bw.write(output);
-//                    bw.newLine();
-//                    bw.flush();
-//                    break;
-//                case 4:		bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename+status+".txt",true),"UTF-8"));
-//                    bw.write(output);
-//                    bw.newLine();
-//                    bw.flush();
-//                    break;
-//                case 5:		bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename+status+".txt",true),"UTF-8"));
-//                    bw.write(output);
-//                    bw.newLine();
-//                    bw.flush();
-//                    break;
-//                case 98:	bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename+status+".txt",true),"UTF-8"));
-//                    bw.write(output);
-//                    bw.newLine();
-//                    bw.flush();
-//                    break;
-//                case 99:	bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename+status+".txt",true),"UTF-8"));
-//                    bw.write(output);
-//                    bw.newLine();
-//                    bw.flush();
-//                    break;
-//                default: 	bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("LWTimport/Corrupt-Status.txt",true),"UTF-8"));
-//                    bw.write(output);
-//                    bw.newLine();
-//                    bw.flush();
-//                    break;
-//            }
-//        }
-//        bw.close();
-//        Log.v(TAG,"Import files for LWT successfully written...");
-//    }
+    public void createImportFiles() throws IOException {
+        File dir = new File("/storage/emulated/0/LWTimport");
+//        File dir = new File("/storage/emulated/0/Android/data/com.dropbox.android/files/u357296010/scratch/android/language-trainer-android/LWTimport");
+        File[] directoryListing = dir.listFiles();
+
+        if (directoryListing != null) {
+            for (File child : directoryListing) {
+                child.delete(); //deletes already existent files before writing new ones
+            }
+        } else {
+            Log.v(TAG,"Directory not existent.. (createImportFiles)");
+        }
+
+        HashMap<String,ArrayList<String>> temp = new HashMap<>();
+        temp.putAll(database);
+
+        BufferedWriter bw = null;
+
+        for(Map.Entry<String, ArrayList<String>> set : temp.entrySet()) {
+            int status = Integer.parseInt(set.getValue().get(3));
+            String filename = "/storage/emulated/0/LWTimport/WordDatabase_Status";
+//            String filename = "/storage/emulated/0/Android/data/com.dropbox.android/files/u357296010/scratch/android/language-trainer-android/LWTimport/WordDatabase_Status";
+
+            set.getValue().add(3, set.getValue().get(6));
+
+            String output = set.getKey()+listToString(temp.get(set.getKey()));
+
+            switch (status) {
+                case 1:		bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename+status+".txt",true),"UTF-8"));
+                    bw.write(output);
+                    bw.newLine();
+                    bw.flush();
+                    break;
+                case 2:		bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename+status+".txt",true),"UTF-8"));
+                    bw.write(output);
+                    bw.newLine();
+                    bw.flush();
+                    break;
+                case 3:		bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename+status+".txt",true),"UTF-8"));
+                    bw.write(output);
+                    bw.newLine();
+                    bw.flush();
+                    break;
+                case 4:		bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename+status+".txt",true),"UTF-8"));
+                    bw.write(output);
+                    bw.newLine();
+                    bw.flush();
+                    break;
+                case 5:		bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename+status+".txt",true),"UTF-8"));
+                    bw.write(output);
+                    bw.newLine();
+                    bw.flush();
+                    break;
+                case 98:	bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename+status+".txt",true),"UTF-8"));
+                    bw.write(output);
+                    bw.newLine();
+                    bw.flush();
+                    break;
+                case 99:	bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename+status+".txt",true),"UTF-8"));
+                    bw.write(output);
+                    bw.newLine();
+                    bw.flush();
+                    break;
+                default: 	bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("LWTimport/Corrupt-Status.txt",true),"UTF-8"));
+                    bw.write(output);
+                    bw.newLine();
+                    bw.flush();
+                    break;
+            }
+        }
+        bw.close();
+
+        File directory = new File("/storage/emulated/0/LWTimport");
+        File dropbox = new File("/storage/emulated/0/Android/data/com.dropbox.android/files/u357296010/scratch/android/language-trainer-android/LWTimport");
+
+        try {
+            FileUtils.copyDirectory(directory, dropbox);
+        } catch (IOException e) {
+            Log.v(TAG, e.toString());
+        }
+
+        Log.v(TAG,"Import files for LWT successfully written...");
+    }
 
     public static String listToString(List<?> list) {
         String result = "";
@@ -231,4 +245,5 @@ public class TrainerFct {
             }
         }
     }
+
 }
