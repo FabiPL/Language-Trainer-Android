@@ -100,10 +100,19 @@ public class TrainerFct {
     /**
      * Getter
      * @param term
-     * @return sentence of term
+     * @return romanization of term
      */
-    public String getSentence(String term) {
-        return database.get(term).get(1);
+    public String getRomanization(String term) {
+        return database.get(term).get(2);
+    }
+
+    /**
+     * Getter
+     * @param term
+     * @return romanization of term
+     */
+    public String getTagList(String term) {
+        return database.get(term).get(6);
     }
 
     /**
@@ -116,6 +125,43 @@ public class TrainerFct {
     }
 
     /**
+     * Getter
+     * @param term
+     * @return sentence of term
+     */
+    public String getSentence(String term) {
+        return database.get(term).get(1);
+    }
+
+    /**
+     * Change the translation of a word
+     * @param word - of which the translation needs to be changed
+     * @param newTranslation - * for empty (only allowed for statuses 98 and 99)
+     */
+    public void changeTranslation(String word, String newTranslation) {
+        database.get(word).set(0, newTranslation);
+    }
+
+    /**
+     * Change the romanization of a word
+     * @param word - of which the romanization needs to be changed
+     * @param newRomanization - new romanized version of a word (Особенно - asobena)
+     */
+    public void changeRomanization(String word, String newRomanization) {
+        database.get(word).set(2, newRomanization);
+    }
+
+    /**
+     * Change the taglist of a word
+     * @param word - of which the taglist needs to be changed
+     * @param newTagList - new name for a tag list (example: adjective, adverb, noun)
+     */
+    public void changeTagList(String word, String newTagList) {
+        database.get(word).set(6, newTagList);
+    }
+
+
+    /**
      * Change the status of a word
      * @param word - of which the status needs to be changed
      * @param newStatus - level 1-5 | 98 for ignore and 99 for WellKnown
@@ -123,12 +169,21 @@ public class TrainerFct {
     public int changeStatus(String word, int newStatus) {
         if(newStatus < 1) {
             database.get(word).set(3, Integer.toString(1));
-        } else if(newStatus > 5) {
+        } else if(newStatus > 5 && newStatus < 98) {
             database.get(word).set(3, Integer.toString(5));
         } else {
             database.get(word).set(3, Integer.toString(newStatus));
         }
         return Integer.parseInt(database.get(word).get(3));
+    }
+
+    /**
+     * Change the example sentence of a word
+     * @param word - of which the sentence needs to be changed
+     * @param newSentence - String should contain word in {} (example: Особенно он {любит} мёд.)
+     */
+    public void changeSentence(String word, String newSentence) {
+        database.get(word).set(1, newSentence);
     }
 
     /**
@@ -189,12 +244,12 @@ public class TrainerFct {
                     bw.newLine();
                     bw.flush();
                     break;
-                case 98:	bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename+status+".txt",true),"UTF-8"));
+                case 98:	bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename+status+"_Ignore"+".txt",true),"UTF-8"));
                     bw.write(output);
                     bw.newLine();
                     bw.flush();
                     break;
-                case 99:	bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename+status+".txt",true),"UTF-8"));
+                case 99:	bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename+status+"_WKn"+".txt",true),"UTF-8"));
                     bw.write(output);
                     bw.newLine();
                     bw.flush();

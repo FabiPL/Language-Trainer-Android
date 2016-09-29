@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Language Trainer Android</string>
+    <string name="changeWord">Edit Word</string>
+    <string name="wknwn">Well Known</string>
+    <string name="ignore">Ignore</string>
+    <string name="sync">Synchronize</string>
 </resources>
