@@ -29,7 +29,7 @@ public class Pop extends Activity {
         int width = dm.widthPixels;
         int height =  dm.heightPixels;
 
-        getWindow().setLayout(width, (int) (height * 0.6));
+        getWindow().setLayout(width, (int) (height * 0.62));
 
         trainer = new TrainerFct();
         trainer.readLWTExportFile();

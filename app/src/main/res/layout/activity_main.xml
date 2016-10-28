@@ -64,17 +64,6 @@
         android:text="Answ4" />
 
     <Button
-        android:id="@+id/greenButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/continueButton"
-        android:layout_alignEnd="@+id/continueButton"
-        android:layout_alignRight="@+id/continueButton"
-        android:layout_marginBottom="41dp"
-        android:background="#26a221"
-        android:onClick="greenButtonClicked" />
-
-    <Button
         android:id="@+id/redButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -83,18 +72,6 @@
         android:layout_alignTop="@+id/greenButton"
         android:background="#b42727"
         android:onClick="redButtonClicked" />
-
-    <TextView
-        android:id="@+id/sentenceLabel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/answ3Button"
-        android:layout_marginTop="38dp"
-        android:gravity="center"
-        android:text="Sentence"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <TextView
         android:id="@+id/termLabel"
@@ -116,5 +93,38 @@
         android:gravity="center"
         android:text="Feedback"
         android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/sentenceLabel"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:gravity="center"
+        android:text="Sentence"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:layout_below="@+id/answ3Button"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:id="@+id/greenButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#26a221"
+        android:onClick="greenButtonClicked"
+        android:layout_below="@+id/sentenceLabel"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:text="Latin"
+        android:layout_width="60dp"
+        android:layout_height="80dp"
+        android:onClick="romanizationLabelClicked"
+        android:layout_alignBottom="@+id/greenButton"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/romanizationLabel"
+        android:layout_below="@+id/sentenceLabel"
+        android:gravity="center"
+        android:textStyle="normal|bold" />
 
 </RelativeLayout>

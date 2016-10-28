@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "com.futurelanguagelearning.languagetrainerandroid";
 
     private TextView termLabel;
+    private TextView romanizationLabel;
     private TextView sentenceLabel;
     private TextView feedbackLabel;
 
@@ -34,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
     private Button continueButton;
     private TrainerFct trainer;
 
+    private String currently_correct_answer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         Log.i(TAG, "onCreate");
 
         termLabel = (TextView) findViewById(R.id.termLabel);
+        romanizationLabel = (TextView) findViewById(R.id.romanizationLabel);
         sentenceLabel = (TextView) findViewById(R.id.sentenceLabel);
         feedbackLabel = (TextView) findViewById(R.id.feedbackLabel);
 
@@ -65,8 +69,9 @@ public class MainActivity extends AppCompatActivity {
         redButton.setBackgroundColor(Color.TRANSPARENT);
         greenButton.setBackgroundColor(Color.TRANSPARENT);
 
-        termLabel.setText("Welcome | Hallo | Привет");
+        termLabel.setText("Welcome | Hallo | Привет | 你好");
         sentenceLabel.setText("");
+        romanizationLabel.setText("");
         feedbackLabel.setText("Ready when you are :)");
         continueButton.setText("Start");
     }
@@ -81,6 +86,22 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         trainer = new TrainerFct();
         trainer.readLWTExportFile();
+
+        if (continueButton.getText().toString().equals("Continue") && continueButton.isEnabled() && feedbackLabel.getText().toString().equals("Click to save changes.")) {
+            sentenceLabel.setText(trainer.getSentence(termLabel.getText().toString()));
+            romanizationLabel.setText(trainer.getRomanization(termLabel.getText().toString()));
+
+            Button[] answerButtons = {answ1Button, answ2Button, answ3Button, answ4Button};
+
+            for (Button button : answerButtons) {
+                if (button.getText().toString().equals(currently_correct_answer)) {
+                    button.setText(trainer.getTranslation(termLabel.getText().toString()));
+                }
+            }
+
+            currently_correct_answer = trainer.getTranslation(termLabel.getText().toString());
+            feedbackLabel.setText("Changes saved.");
+        }
     }
 
     @Override
@@ -93,9 +114,14 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.changeWordProperties) {
-            if(trainer.getDatabase().containsKey(termLabel.getText().toString())) {
-                if(continueButton.isEnabled() == true) {
+        if (id == R.id.changeWordProperties || id == R.id.moveToWellKnown || id == R.id.moveToIgnore) {
+            if(continueButton.getText().toString().equals("Start")) {
+                feedbackLabel.setText("No term selected. Start LT.");
+            } else if (continueButton.isEnabled() == false) {
+                Toast.makeText(this, "Select a final answer first.", Toast.LENGTH_SHORT).show();
+            } else {
+
+                if (id == R.id.changeWordProperties) {
                     Toast.makeText(this, "Loading word properties..", Toast.LENGTH_SHORT).show();
 
                     (new Handler())
@@ -110,75 +136,66 @@ public class MainActivity extends AppCompatActivity {
                                             i.putExtras(bundle);
 
                                             startActivity(i);
+                                            feedbackLabel.setText("Click to save changes.");
                                         }
                                     }, 1000);
+                } else if(id == R.id.moveToWellKnown) {
+                    trainer.changeStatus(termLabel.getText().toString(), 99);
+                    Button[] Buttons = {answ1Button, answ2Button, answ3Button, answ4Button, redButton, greenButton};
+
+                    for (Button button : Buttons) {
+                        button.setEnabled(false);
+                    }
+
+                    continueButton.setEnabled(true);
+                    redButton.setBackgroundColor(Color.TRANSPARENT);
+                    greenButton.setBackgroundColor(Color.TRANSPARENT);
+
+                    try {
+                        trainer.save();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    feedbackLabel.setText("Moved to Well Known.");
                 } else {
-                    Toast.makeText(this, "Edit mode is only accessible once you've selected an answer", Toast.LENGTH_SHORT).show();
+                    trainer.changeStatus(termLabel.getText().toString(), 98);
+                    Button[] Buttons = {answ1Button, answ2Button, answ3Button, answ4Button, redButton, greenButton};
+
+                    for (Button button : Buttons) {
+                        button.setEnabled(false);
+                    }
+
+                    continueButton.setEnabled(true);
+                    redButton.setBackgroundColor(Color.TRANSPARENT);
+                    greenButton.setBackgroundColor(Color.TRANSPARENT);
+
+                    try {
+                        trainer.save();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    feedbackLabel.setText("Term will be ignored.");
                 }
-            } else {
-                feedbackLabel.setText("This doesn't work here.");
-            }
-        } else if(id == R.id.moveToWellKnown) {
-            if(trainer.getDatabase().containsKey(termLabel.getText().toString())) {
-                trainer.changeStatus(termLabel.getText().toString(), 99);
-                Button[] Buttons = {answ1Button, answ2Button, answ3Button, answ4Button};
-
-                for (Button button : Buttons) {
-                    button.setEnabled(false);
-                }
-
-                continueButton.setEnabled(true);
-                redButton.setBackgroundColor(Color.TRANSPARENT);
-                greenButton.setBackgroundColor(Color.TRANSPARENT);
-
-                try {
-                    trainer.save();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                feedbackLabel.setText("Moved to Well Known.");
-            } else {
-                feedbackLabel.setText("This doesn't work here.");
-            }
-        } else if (id == R.id.moveToIgnore) {
-            if(trainer.getDatabase().containsKey(termLabel.getText().toString())) {
-                trainer.changeStatus(termLabel.getText().toString(), 98);
-                Button[] Buttons = {answ1Button, answ2Button, answ3Button, answ4Button};
-
-                for (Button button : Buttons) {
-                    button.setEnabled(false);
-                }
-
-                continueButton.setEnabled(true);
-                redButton.setBackgroundColor(Color.TRANSPARENT);
-                greenButton.setBackgroundColor(Color.TRANSPARENT);
-
-                try {
-                    trainer.save();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                feedbackLabel.setText("Term will be ignored.");
-            } else {
-                feedbackLabel.setText("This doesn't work here.");
             }
         } else {
-            Runnable r = new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        trainer.createImportFiles();
-                    } catch (IOException e) {
-                        Log.v(TAG,e.toString());
+            if (id == R.id.syncData) {
+                Runnable r = new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            trainer.createImportFiles();
+                        } catch (IOException e) {
+                            Log.v(TAG,e.toString());
+                        }
+                        trainer = new TrainerFct();
+                        trainer.readLWTExportFile();
                     }
-                    trainer = new TrainerFct();
-                    trainer.readLWTExportFile();
-                }
-            };
+                };
 
-            Thread thread = new Thread(r);
-            thread.start();
-            Toast.makeText(this,"Synchronizing..",Toast.LENGTH_SHORT).show();
+                Thread thread = new Thread(r);
+                thread.start();
+                Toast.makeText(this,"Synchronizing..",Toast.LENGTH_SHORT).show();
+            }
         }
 
         return super.onOptionsItemSelected(item);
@@ -202,6 +219,11 @@ public class MainActivity extends AppCompatActivity {
 
         redButton.setBackgroundColor(Color.RED);
         greenButton.setBackgroundColor(Color.GREEN);
+        romanizationLabel.setBackgroundResource(R.color.grey);
+
+        romanizationLabel.setText("");
+
+        currently_correct_answer = trainer.getTranslation(termLabel.getText().toString());
     }
 
     public void redButtonClicked(View view) throws IOException {
@@ -277,6 +299,9 @@ public class MainActivity extends AppCompatActivity {
             }
             continueButton.setEnabled(false);
 
+            romanizationLabel.setText(trainer.getRomanization(termLabel.getText().toString()));
+            romanizationLabel.setBackgroundResource(0);
+
             Random rand = new Random();
             int random = rand.nextInt(4);
             answerButtons[random].setText(trainer.getTranslation(termLabel.getText().toString()));
@@ -286,6 +311,11 @@ public class MainActivity extends AppCompatActivity {
                     button.setBackgroundColor(Color.GREEN);
             }
         }
+    }
+
+    public void romanizationLabelClicked(View view) {
+        romanizationLabel.setText(trainer.getRomanization(termLabel.getText().toString()));
+        romanizationLabel.setBackgroundResource(0);
     }
 
     public void answ1ButtonClicked(View view) {
@@ -305,17 +335,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void answButtonClicked(Button setButton) {
+        String status = trainer.getStatus(termLabel.getText().toString());
         Button[] answerButtons = {answ1Button, answ2Button, answ3Button, answ4Button};
         if(trainer.getTranslation(termLabel.getText().toString()).equals(setButton.getText().toString())) {
             setButton.setBackgroundColor(Color.GREEN);
-            feedbackLabel.setText("Good job!");
+            feedbackLabel.setText("Status unchanged " + "(" + status + ")");
+
+            romanizationLabel.setText(trainer.getRomanization(termLabel.getText().toString()));
+            romanizationLabel.setBackgroundResource(0);
+
         } else {
             setButton.setBackgroundColor(Color.RED);
             for (Button button : answerButtons) {
                 if (trainer.getTranslation(termLabel.getText().toString()).equals(button.getText().toString()))
                     button.setBackgroundColor(Color.GREEN);
             }
-            feedbackLabel.setText("Maybe next time..");
+            feedbackLabel.setText("Status unchanged " + "(" + status + ")");
+
+            romanizationLabel.setText(trainer.getRomanization(termLabel.getText().toString()));
+            romanizationLabel.setBackgroundResource(0);
         }
         continueButton.setEnabled(true);
         for(Button button : answerButtons) {
